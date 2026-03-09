@@ -1,0 +1,160 @@
+/* ==================================================
+   SkyLink Pro 场景化测试用例脚本 (中国境内版 - 标准化城市名)
+   包含两套时间基准：
+   1. 固定基准时间: 2025-12-29 17:00:00 (用于特定日期测试)
+   2. 动态基准时间: NOW() (用于即时演示，直接看到状态变化)
+   ================================================== */
+
+DROP DATABASE IF EXISTS skylink_db;
+CREATE DATABASE skylink_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE skylink_db;
+
+-- 1. 用户表
+CREATE TABLE users (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(50) NOT NULL,
+    real_name VARCHAR(50),
+    balance DECIMAL(10, 2) DEFAULT 0.00,
+    is_admin TINYINT(1) DEFAULT 0
+);
+
+-- 2. 航班表
+CREATE TABLE flights (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    flight_code VARCHAR(20) NOT NULL,
+    airline VARCHAR(50) NOT NULL,
+    origin VARCHAR(50) NOT NULL,
+    destination VARCHAR(50) NOT NULL,
+    dep_time DATETIME NOT NULL,
+    arr_time DATETIME NOT NULL,
+    model VARCHAR(30),
+    price DECIMAL(10, 2) NOT NULL,
+    status VARCHAR(20) DEFAULT 'ON TIME'
+);
+
+-- 3. 订单表
+CREATE TABLE bookings (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    order_number VARCHAR(64) NOT NULL UNIQUE,
+    user_id INT NOT NULL,
+    passenger_id INT DEFAULT 0,
+    passenger_name VARCHAR(50),
+    flight_id INT NOT NULL,
+    seat_row INT DEFAULT -1,
+    seat_col INT DEFAULT -1,
+    status ENUM('Booked', 'Paid', 'Checked-in', 'Cancelled', 'Refunded') DEFAULT 'Booked',
+    price DECIMAL(10, 2) NOT NULL,
+    booking_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    is_rescheduled TINYINT(1) DEFAULT 0,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (flight_id) REFERENCES flights(id) ON DELETE CASCADE
+);
+
+-- ================= 插入基础用户数据 =================
+
+INSERT INTO users (username, password, real_name, balance, is_admin) VALUES 
+('admin', '123456', '系统管理员', 999999.00, 1),
+('111', '111', '欢迎回来，我是我是我是', 114514.00, 0),
+('test001', '123', '李雷', 50000.00, 0),
+('test002', '123', '韩梅梅', 2000.00, 0);
+
+-- ================= 第一部分：基于固定时间 (2025-12-29 17:00) 的测试数据 =================
+
+/* 
+   场景 1: 2025-12-29 下午 16:30 - 18:00 状态展示
+   (需将系统时间改为 2025-12-29 17:00 配合查看)
+*/
+
+-- [飞行中] (FLYING): 14:00起飞，18:00到达 -> 17:00时处于飞行中
+INSERT INTO flights (flight_code, airline, origin, destination, dep_time, arr_time, model, price, status) VALUES 
+('MU5100', '东方航空', '上海市', '昆明市', '2025-12-29 14:00:00', '2025-12-29 18:00:00', 'B737', 1500.00, 'ON TIME');
+
+-- [正在登机] (BOARDING): 17:30起飞 -> 17:00时处于起飞前30分钟
+INSERT INTO flights (flight_code, airline, origin, destination, dep_time, arr_time, model, price, status) VALUES 
+('CA1301', '中国国航', '北京市', '广州市', '2025-12-29 17:30:00', '2025-12-29 20:45:00', 'B787', 1800.00, 'ON TIME');
+
+-- [已抵达] (ARRIVED): 16:30到达 -> 17:00时已到达30分钟
+INSERT INTO flights (flight_code, airline, origin, destination, dep_time, arr_time, model, price, status) VALUES 
+('CZ3001', '南方航空', '武汉市', '深圳市', '2025-12-29 14:30:00', '2025-12-29 16:30:00', 'B737', 900.00, 'ON TIME');
+
+-- [手动修改 - 延误] (DELAYED)
+INSERT INTO flights (flight_code, airline, origin, destination, dep_time, arr_time, model, price, status) VALUES 
+('KN5888', '联合航空', '佛山市', '北京市', '2025-12-29 17:15:00', '2025-12-29 20:30:00', 'B737', 600.00, 'DELAYED');
+
+-- [手动修改 - 取消] (CANCELLED)
+INSERT INTO flights (flight_code, airline, origin, destination, dep_time, arr_time, model, price, status) VALUES 
+('ZH9009', '深圳航空', '深圳市', '南京市', '2025-12-29 17:50:00', '2025-12-29 20:00:00', 'A320', 850.00, 'CANCELLED');
+
+-- [准点/计划中] (ON TIME)
+INSERT INTO flights (flight_code, airline, origin, destination, dep_time, arr_time, model, price, status) VALUES 
+('MF8001', '厦门航空', '厦门市', '杭州市', '2025-12-29 20:00:00', '2025-12-29 21:30:00', 'B737', 550.00, 'ON TIME');
+
+
+/* 
+   场景 2: 港澳台地区航班 (靠前日期 12月29日-30日)
+   注意：此处使用了全称以匹配 C++ 中的数据标准化
+*/
+INSERT INTO flights (flight_code, airline, origin, destination, dep_time, arr_time, model, price, status) VALUES 
+('CX300', '国泰航空', '上海市', '香港特别行政区', '2025-12-29 19:00:00', '2025-12-29 21:30:00', 'A330', 1200.00, 'ON TIME'),
+('NX002', '澳门航空', '北京市', '澳门特别行政区', '2025-12-30 09:00:00', '2025-12-30 12:30:00', 'A321', 1100.00, 'ON TIME'),
+('BR771', '长荣航空', '香港特别行政区', '台北市', '2025-12-30 14:00:00', '2025-12-30 15:50:00', 'B777', 950.00, 'ON TIME'),
+('CI202', '中华航空', '台北市', '台南市', '2025-12-30 18:00:00', '2025-12-30 19:00:00', 'ATR72', 300.00, 'ON TIME');
+
+
+/* 
+   场景 3: 直飞与中转比较 (特定日期地点: 2025年12月30日 北京 -> 香港)
+*/
+-- 方案 A: 直飞 (北京 -> 香港)
+INSERT INTO flights (flight_code, airline, origin, destination, dep_time, arr_time, model, price, status) VALUES 
+('CA111', '中国国航', '北京市', '香港特别行政区', '2025-12-30 10:00:00', '2025-12-30 13:30:00', 'A350', 2500.00, 'ON TIME');
+
+-- 方案 B: 中转 (北京 -> 上海 -> 香港)
+-- 第一程: 北京 -> 上海
+INSERT INTO flights (flight_code, airline, origin, destination, dep_time, arr_time, model, price, status) VALUES 
+('MU5188', '东方航空', '北京市', '上海市', '2025-12-30 08:00:00', '2025-12-30 10:15:00', 'A330', 800.00, 'ON TIME');
+-- 第二程: 上海 -> 香港 (接驳时间合适)
+INSERT INTO flights (flight_code, airline, origin, destination, dep_time, arr_time, model, price, status) VALUES 
+('MU701', '东方航空', '上海市', '香港特别行政区', '2025-12-30 13:00:00', '2025-12-30 15:30:00', 'A330', 900.00, 'ON TIME');
+
+
+/* 
+   场景 4: 其余日期航班填充 (2025-12-31 到 2026-01-05)
+*/
+INSERT INTO flights (flight_code, airline, origin, destination, dep_time, arr_time, model, price, status) VALUES 
+('MU5111', '东方航空', '上海市', '北京市', '2025-12-31 22:00:00', '2026-01-01 00:30:00', 'A320', 700.00, 'ON TIME'), -- 跨年
+('CZ3101', '南方航空', '广州市', '成都市', '2026-01-01 08:00:00', '2026-01-01 10:30:00', 'B737', 1100.00, 'ON TIME'), -- 元旦
+('HU7002', '海南航空', '北京市', '三亚市', '2026-01-02 09:00:00', '2026-01-02 13:00:00', 'B787', 2200.00, 'ON TIME'),
+('SC4001', '山东航空', '青岛市', '上海市', '2026-01-03 10:00:00', '2026-01-03 11:40:00', 'B737', 500.00, 'ON TIME'),
+('HO1111', '吉祥航空', '上海市', '深圳市', '2026-01-04 15:00:00', '2026-01-04 17:30:00', 'A321', 950.00, 'ON TIME'),
+('CA1505', '中国国航', '北京市', '南京市', '2026-01-05 18:00:00', '2026-01-05 20:00:00', 'A320', 600.00, 'ON TIME');
+
+
+-- ================= 第二部分：基于当前系统时间 (NOW()) 的动态测试数据 =================
+-- 无论何时运行，这些数据都会在软件中显示相应的动态状态
+
+-- 1. [实时-正在登机]: 起飞时间设为当前时间+30分钟
+INSERT INTO flights (flight_code, airline, origin, destination, dep_time, arr_time, model, price, status) VALUES 
+('NOW_001', '实时航空', '北京市', '上海市', DATE_ADD(NOW(), INTERVAL 30 MINUTE), DATE_ADD(NOW(), INTERVAL 150 MINUTE), 'A380', 1999.00, 'ON TIME');
+
+-- 2. [实时-飞行中]: 起飞时间设为当前时间-1小时 (已起飞)，到达时间设为+1小时 (未到达)
+INSERT INTO flights (flight_code, airline, origin, destination, dep_time, arr_time, model, price, status) VALUES 
+('NOW_002', '实时航空', '广州市', '成都市', DATE_ADD(NOW(), INTERVAL -1 HOUR), DATE_ADD(NOW(), INTERVAL 1 HOUR), 'B787', 1500.00, 'ON TIME');
+
+-- 3. [实时-已抵达]: 到达时间设为当前时间-30分钟
+INSERT INTO flights (flight_code, airline, origin, destination, dep_time, arr_time, model, price, status) VALUES 
+('NOW_003', '实时航空', '深圳市', '武汉市', DATE_ADD(NOW(), INTERVAL -3 HOUR), DATE_ADD(NOW(), INTERVAL -30 MINUTE), 'B737', 800.00, 'ON TIME');
+
+-- 4. [实时-延误]: 即使时间是准点的，但被管理员标记为延误
+INSERT INTO flights (flight_code, airline, origin, destination, dep_time, arr_time, model, price, status) VALUES 
+('NOW_004', '实时航空', '成都市', '西安市', DATE_ADD(NOW(), INTERVAL 2 HOUR), DATE_ADD(NOW(), INTERVAL 4 HOUR), 'A320', 600.00, 'DELAYED');
+
+-- 5. [实时-中转测试]: 
+-- 第一程 (快到了): 起飞 -2小时，到达 +10分钟
+INSERT INTO flights (flight_code, airline, origin, destination, dep_time, arr_time, model, price, status) VALUES 
+('NOW_TRANS1', '实时航空', '哈尔滨市', '上海市', DATE_ADD(NOW(), INTERVAL -2 HOUR), DATE_ADD(NOW(), INTERVAL 10 MINUTE), 'A320', 900.00, 'ON TIME');
+-- 第二程 (接驳): 第一程到达后 +3小时起飞
+INSERT INTO flights (flight_code, airline, origin, destination, dep_time, arr_time, model, price, status) VALUES 
+('NOW_TRANS2', '实时航空', '上海市', '三亚市', DATE_ADD(NOW(), INTERVAL 190 MINUTE), DATE_ADD(NOW(), INTERVAL 400 MINUTE), 'B787', 1200.00, 'ON TIME');
+
+SELECT 'Data initialized with Standardized City Names.' AS Result;

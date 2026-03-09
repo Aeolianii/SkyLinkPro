@@ -1,0 +1,451 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>OrderDetailDialog</class>
+ <widget class="QDialog" name="OrderDetailDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>580</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>订单详情</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QDialog { background: transparent; }
+QWidget { font-family: 'Microsoft YaHei', 'Arial'; }</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>20</number>
+   </property>
+   <property name="topMargin">
+    <number>20</number>
+   </property>
+   <property name="rightMargin">
+    <number>20</number>
+   </property>
+   <property name="bottomMargin">
+    <number>20</number>
+   </property>
+   <item>
+    <widget class="QFrame" name="cardFrame">
+     <property name="styleSheet">
+      <string notr="true">#cardFrame {
+	background: white;
+	border-radius: 16px;
+}</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_Card">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <!-- 顶部 Header 区域 -->
+       <widget class="QFrame" name="headerFrame">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>130</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">/* 默认样式，具体颜色会在 CPP 中根据状态动态修改 */
+#headerFrame {
+	background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #0052D4, stop:1 #4364F7);
+	border-top-left-radius: 16px;
+	border-top-right-radius: 16px;
+}</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_Header">
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_Top">
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="btnClose">
+             <property name="minimumSize">
+              <size>
+               <width>30</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="cursor">
+              <cursorShape>PointingHandCursor</cursorShape>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color:rgba(255,255,255,0.7); font-size:24px; border:none; background:transparent; font-weight:bold;</string>
+             </property>
+             <property name="text">
+              <string>×</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_boarding">
+           <property name="styleSheet">
+            <string notr="true">color: rgba(255,255,255,0.6); font-size: 12px; letter-spacing: 2px; font-weight: bold;</string>
+           </property>
+           <property name="text">
+            <string>BOARDING PASS</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lblStatusBig">
+           <property name="styleSheet">
+            <string notr="true">color: white; font-size: 28px; font-weight: bold;</string>
+           </property>
+           <property name="text">
+            <string>STATUS</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_H">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <!-- 信息区域 -->
+       <widget class="QWidget" name="infoContainer" native="true">
+        <layout class="QVBoxLayout" name="verticalLayout_Info">
+         <property name="spacing">
+          <number>20</number>
+         </property>
+         <property name="leftMargin">
+          <number>30</number>
+         </property>
+         <property name="topMargin">
+          <number>30</number>
+         </property>
+         <property name="rightMargin">
+          <number>30</number>
+         </property>
+         <property name="bottomMargin">
+          <number>20</number>
+         </property>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_Route">
+           <item>
+            <widget class="QLabel" name="lblOrigin">
+             <property name="styleSheet">
+              <string notr="true">font-size: 20px; font-weight: bold; color: #333;</string>
+             </property>
+             <property name="text">
+              <string>ORG</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_arrow">
+             <property name="styleSheet">
+              <string notr="true">color: #0086F6; font-size: 20px;</string>
+             </property>
+             <property name="text">
+              <string>✈</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="lblDest">
+             <property name="styleSheet">
+              <string notr="true">font-size: 20px; font-weight: bold; color: #333;</string>
+             </property>
+             <property name="text">
+              <string>DST</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QLabel" name="lblDepTime">
+           <property name="styleSheet">
+            <string notr="true">font-size: 32px; font-weight: 300; color: #333;</string>
+           </property>
+           <property name="text">
+            <string>00月00日 00:00</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="Line" name="line">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QGridLayout" name="gridLayout_Details">
+           <property name="verticalSpacing">
+            <number>15</number>
+           </property>
+           <item row="3" column="1">
+            <widget class="QLabel" name="lblSeat">
+             <property name="styleSheet">
+              <string notr="true">color:#0086F6; font-size:14px; font-weight:bold;</string>
+             </property>
+             <property name="text">
+              <string>--</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLabel" name="label_t2">
+             <property name="styleSheet">
+              <string notr="true">color:#999; font-size:10px; text-transform: uppercase;</string>
+             </property>
+             <property name="text">
+              <string>Flight</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_t3">
+             <property name="styleSheet">
+              <string notr="true">color:#999; font-size:10px; text-transform: uppercase;</string>
+             </property>
+             <property name="text">
+              <string>Date</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="lblPrice">
+             <property name="styleSheet">
+              <string notr="true">color:#E53E3E; font-size:16px; font-weight:bold;</string>
+             </property>
+             <property name="text">
+              <string>¥0.00</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="lblDate">
+             <property name="styleSheet">
+              <string notr="true">color:#333; font-size:14px; font-weight:bold;</string>
+             </property>
+             <property name="text">
+              <string>YYYY-MM-DD</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_t1">
+             <property name="styleSheet">
+              <string notr="true">color:#999; font-size:10px; text-transform: uppercase;</string>
+             </property>
+             <property name="text">
+              <string>Passenger</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="lblPassengerName">
+             <property name="styleSheet">
+              <string notr="true">color:#333; font-size:14px; font-weight:bold;</string>
+             </property>
+             <property name="text">
+              <string>Name</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QLabel" name="label_t4">
+             <property name="styleSheet">
+              <string notr="true">color:#999; font-size:10px; text-transform: uppercase;</string>
+             </property>
+             <property name="text">
+              <string>Seat</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="label_t5">
+             <property name="styleSheet">
+              <string notr="true">color:#999; font-size:10px; text-transform: uppercase;</string>
+             </property>
+             <property name="text">
+              <string>Price</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLabel" name="lblFlightCode">
+             <property name="styleSheet">
+              <string notr="true">color:#333; font-size:14px; font-weight:bold;</string>
+             </property>
+             <property name="text">
+              <string>Code</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <!-- 按钮区域，代码中会控制 hidden -->
+       <widget class="QWidget" name="btnContainer" native="true">
+        <layout class="QHBoxLayout" name="horizontalLayout_Btns">
+         <property name="spacing">
+          <number>15</number>
+         </property>
+         <property name="leftMargin">
+          <number>20</number>
+         </property>
+         <property name="rightMargin">
+          <number>20</number>
+         </property>
+         <property name="bottomMargin">
+          <number>25</number>
+         </property>
+         <item>
+          <widget class="QPushButton" name="btnReschedule">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>45</height>
+            </size>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton { background: white; border: 1px solid #DDD; color: #666; border-radius: 8px; font-weight:bold; } QPushButton:hover { border-color: #999; color: #333; }</string>
+           </property>
+           <property name="text">
+            <string>改签</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnRefund">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>45</height>
+            </size>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton { background: #FFF0F0; border: none; color: #FF4444; border-radius: 8px; font-weight:bold; } QPushButton:hover { background: #FFE0E0; }</string>
+           </property>
+           <property name="text">
+            <string>退票</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

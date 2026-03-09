@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PassengerConfirmDialog</class>
+ <widget class="QDialog" name="PassengerConfirmDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>420</width>
+    <height>420</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>确认乘机人</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QDialog { background: transparent; }
+QWidget { font-family: 'Microsoft YaHei', 'Arial'; }</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>10</number>
+   </property>
+   <property name="topMargin">
+    <number>10</number>
+   </property>
+   <property name="rightMargin">
+    <number>10</number>
+   </property>
+   <property name="bottomMargin">
+    <number>10</number>
+   </property>
+   <item>
+    <widget class="QFrame" name="mainFrame">
+     <property name="styleSheet">
+      <string notr="true">#mainFrame {
+	background: white;
+	border-radius: 12px;
+}</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_Main">
+      <property name="spacing">
+       <number>15</number>
+      </property>
+      <property name="leftMargin">
+       <number>30</number>
+      </property>
+      <property name="topMargin">
+       <number>30</number>
+      </property>
+      <property name="rightMargin">
+       <number>30</number>
+      </property>
+      <property name="bottomMargin">
+       <number>30</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="label_title">
+        <property name="styleSheet">
+         <string notr="true">font-size: 18px; font-weight: bold; color: #333; margin-bottom: 5px;</string>
+        </property>
+        <property name="text">
+         <string>确认乘机人信息</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="groupBox_Radios">
+        <property name="styleSheet">
+         <string notr="true">border:none; QRadioButton { padding: 5px; color: #333; font-size: 14px; }</string>
+        </property>
+        <property name="title">
+         <string/>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_Radios">
+         <property name="spacing">
+          <number>5</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QRadioButton" name="rbSelf">
+           <property name="text">
+            <string>给自己买 (Name)</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="rbOther">
+           <property name="text">
+            <string>给他人买</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <!-- 他人信息表单，默认隐藏 (visible=false) -->
+       <widget class="QWidget" name="formContainer" native="true">
+        <property name="visible">
+         <bool>false</bool>
+        </property>
+        <layout class="QFormLayout" name="formLayout">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <property name="verticalSpacing">
+          <number>10</number>
+         </property>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_user">
+           <property name="styleSheet">
+            <string notr="true">color: #666; font-size: 14px;</string>
+           </property>
+           <property name="text">
+            <string>账号:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLineEdit" name="leOtherUser">
+           <property name="styleSheet">
+            <string notr="true">border: 1px solid #DDD; border-radius: 6px; padding: 6px; background: #FAFAFA;</string>
+           </property>
+           <property name="placeholderText">
+            <string>对方账号 (Username)</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_name">
+           <property name="styleSheet">
+            <string notr="true">color: #666; font-size: 14px;</string>
+           </property>
+           <property name="text">
+            <string>姓名:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="leOtherName">
+           <property name="styleSheet">
+            <string notr="true">border: 1px solid #DDD; border-radius: 6px; padding: 6px; background: #FAFAFA;</string>
+           </property>
+           <property name="placeholderText">
+            <string>真实姓名 (Real Name)</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="Line" name="line">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_security">
+        <property name="styleSheet">
+         <string notr="true">color: #0086F6; font-weight: bold; font-size: 14px;</string>
+        </property>
+        <property name="text">
+         <string>🔒 安全验证：请输入登录密码</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="leMyPwd">
+        <property name="styleSheet">
+         <string notr="true">border: 1px solid #DDD; border-radius: 6px; padding: 8px; background: #FAFAFA; font-size: 14px;</string>
+        </property>
+        <property name="echoMode">
+         <enum>QLineEdit::Password</enum>
+        </property>
+        <property name="placeholderText">
+         <string>您的登录密码</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_Btns">
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnCancel">
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>36</height>
+           </size>
+          </property>
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QPushButton { background: #F5F5F5; color: #666; border: none; border-radius: 18px; } QPushButton:hover { background: #E0E0E0; }</string>
+          </property>
+          <property name="text">
+           <string>取消</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnOk">
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>36</height>
+           </size>
+          </property>
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QPushButton { background: #0086F6; color: white; border: none; border-radius: 18px; font-weight: bold; } QPushButton:hover { background: #0076D6; }</string>
+          </property>
+          <property name="text">
+           <string>确认支付</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
