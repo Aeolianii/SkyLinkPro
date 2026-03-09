@@ -1,4 +1,4 @@
-# C++ objects and libs
+# C++ 编译产物
 *.slo
 *.lo
 *.o
@@ -10,7 +10,7 @@
 *.dll
 *.dylib
 
-# Qt-es
+# Qt 专属文件
 object_script.*.Release
 object_script.*.Debug
 *_plugin_import.cpp
@@ -28,27 +28,22 @@ ui_*.h
 *.qmlc
 *.jsc
 Makefile*
-*build-*
 *.qm
 *.prl
 
-# Qt unit tests
+# Qt 单元测试
 target_wrapper.*
 
-# QtCreator
+# QtCreator 配置文件
 *.autosave
-
-# QtCreator Qml
 *.qmlproject.user
 *.qmlproject.user.*
-
-# QtCreator CMake
 CMakeLists.txt.user*
-
-# QtCreator 4.8< compilation database
 compile_commands.json
-
-# QtCreator local machine specific files for imported projects
 *creator.user*
-
 *_qmlcache.qrc
+
+# 核心：忽略所有 build 文件夹（无论层级）
+build/
+cmake-build-*/
+*build-*
